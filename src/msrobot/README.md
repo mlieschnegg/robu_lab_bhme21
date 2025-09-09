@@ -12,5 +12,5 @@ Dieses Package enthält den Code und die URDF-Dateien für den CandyBot
 ```bash
 colcon build
 source install/setup.bash
-ros2 launch candybot master_slave.launch.py
+ros2 launch msrobot_bringup simulated_robot.launch.py
 ```
