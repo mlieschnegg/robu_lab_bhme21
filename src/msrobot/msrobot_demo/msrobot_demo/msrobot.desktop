@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/robu/work/robotic/robu_ws/src/msrobot/msrobot/start_msrobot.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=My Python Script
+Comment=Startet mein Python-Skript beim Hochfahren
+

@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+
+
+    <!-- Start GZ or Ignition depending on ROS 2 Version -->
+    <xacro:arg name="is_ignition" default="false"/>
+
+    <!-- Load Simulated or Real Hardware Interfaces -->
+    <xacro:arg name="is_sim" default="true"/>
+
+    <!-- Include Gazebo Parameters -->
+    <xacro:include filename="$(find msrobot_description)/urdf/msrobot_gazebo.xacro" />
+
+    <!-- Include ros2_control Plugins -->
+    <xacro:include filename="$(find msrobot_description)/urdf/msrobot_ros2_control.xacro" />
+
+	<xacro:include filename="$(find msrobot_description)/urdf/msrobot_include.xacro" />
+    <xacro:include filename="$(find msrobot_description)/urdf/utils.urdf.xacro" />
+
+
+    <link name="world"></link>
+
+    <joint name="world_to_base_link" type="fixed">
+        <parent link="world" />
+        <child link="base_link" />
+        <origin  rpy="0 0 0" xyz="0 0 0" />
+    </joint>
+
+    <link name="base_link">
+        <xacro:default_inertial mass="10.0"/>
+        <visual>
+            <origin xyz="0 0 0.019" rpy="0 0 0"/>
+            <geometry>
+               <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-430_new.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.019" rpy="0 0 0"/>
+            <geometry>
+               <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-430_new.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_to_shoulder" type="revolute">
+        <parent link="base_link" />
+        <child link="shoulder_rotation" />
+        <origin  rpy="0 0 0" xyz="0 0 0.055" />
+        <axis rpy="0 0 0" xyz="0 0 1" />
+        <limit effort="${effort}" lower="${-1. * pi}" upper="${1. * pi}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="shoulder_rotation">
+        <xacro:default_inertial mass="0.2"/>
+        <visual>
+            <origin xyz="0 0 -.036" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/shoulder_rotation.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 -.036" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/shoulder_rotation.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="elbow_base" type="fixed">
+        <parent link="shoulder_rotation" />
+        <child link="elbow_servo" />
+        <origin  rpy="0 0 0" xyz="0 0 -0.004" />
+    </joint>
+
+    <link name="elbow_servo">
+        <xacro:default_inertial mass="0.15"/>
+        <visual>
+            <origin xyz="0 0 0.005" rpy="0 ${-0.5 * pi} 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-430_new.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.005" rpy="0 ${-0.5 * pi} 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-430_new.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="elbow_rotation" type="revolute">
+        <parent link="elbow_servo" />
+        <child link="shoulder_to_elbow" />
+        <origin  rpy="0 0 0" xyz="0 0 0.005" />
+        <axis rpy="0 0 0" xyz="1 0 0" />
+        <limit effort="${effort}" lower="${-10.0 * pi/180.0}" upper="${120.0 * pi/180.0}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="shoulder_to_elbow">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0 0 0.00" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/shoulder_to_elbow.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.00" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/shoulder_to_elbow.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wrist_extension_base" type="fixed">
+        <parent link="shoulder_to_elbow" />
+        <child link="wrist_extension_servo" />
+        <origin  rpy="0 0 0" xyz="0 0.11 0" />
+    </joint>
+
+    <link name="wrist_extension_servo">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0.008 -0.0015 -0.0145" rpy="${-0.5 * pi} 0 ${-0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0.008 -0.0015 -0.0145" rpy="${-0.5 * pi} 0 ${-0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wrist_extension_rotation" type="revolute">
+        <parent link="wrist_extension_servo" />
+        <child link="elbow_to_wrist_extension" />
+        <origin  rpy="0 0 0" xyz="0 -0.0016 -0.015" />
+        <axis rpy="0 0 0" xyz="1 0 0" />
+        <limit effort="${effort}" lower="${-170.0 * pi/180.0}" upper="${20.0 * pi/180.0}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="elbow_to_wrist_extension">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0 0.0085 -0.0085" rpy="0 0 ${pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/elbow_to_wrist_extension.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0 0.0085 -0.0085" rpy="0 0 ${pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/elbow_to_wrist_extension.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wrist_base" type="fixed">
+        <parent link="elbow_to_wrist_extension" />
+        <child link="wrist_servo" />
+        <origin  rpy="0 0 0" xyz="0 0.1005 0.0025" />
+    </joint>
+
+    <link name="wrist_servo">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0.008 0.0 0" rpy="${-0. * pi} ${0.5 * pi} ${0. * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0.008 0.0 0" rpy="${-0. * pi} ${0.5 * pi} ${0. * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="wrist_rotation" type="revolute">
+        <parent link="wrist_servo" />
+        <child link="elbow_to_wrist" />
+        <origin  rpy="0 0 0" xyz="0 0 0" />
+        <axis rpy="0 0 0" xyz="1 0 0" />
+        <limit effort="${effort}" lower="${-110.0 * pi/180.0}" upper="${110.0 * pi/180.0}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="elbow_to_wrist">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0.02425 0.019 -0.011" rpy="${0.*pi} ${-0.5*pi} ${0.5*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/elbow_to_wrist.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0.02425 0.019 -0.011" rpy="${0.*pi} ${-0.5*pi} ${0.5*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/elbow_to_wrist.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="gripper_base" type="fixed">
+        <parent link="elbow_to_wrist" />
+        <child link="gripper_base_servo" />
+        <origin  rpy="0 0 0" xyz="-0.0018 0.0385 0.0" />
+    </joint>
+
+    <link name="gripper_base_servo">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0. 0.0 0" rpy="${-0. * pi} ${0.5 * pi} ${0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0. 0.0 0" rpy="${-0. * pi} ${0.5 * pi} ${0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="gripper_rotation" type="revolute">
+        <parent link="gripper_base_servo" />
+        <child link="gripper_static_part" />
+        <origin  rpy="0 0 0" xyz="0 0 0" />
+        <axis rpy="0 0 0" xyz="0 1 0" />
+        <limit effort="${effort}" lower="${-180.0 * pi/180.0}" upper="${180.0 * pi/180.0}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="gripper_static_part">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0.00075 0.026 0.01475" rpy="${0.*pi} ${1.*pi} ${0.*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/gripper_static_part.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0.00075 0.026 0.01475" rpy="${0.*pi} ${1.*pi} ${0.*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/gripper_static_part.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+    <joint name="gripper_fixed" type="fixed">
+        <parent link="gripper_static_part" />
+        <child link="gripper_servo" />
+        <origin  rpy="0 0 0" xyz="-0.0075 0.019 0.008" />
+    </joint>
+
+    <link name="gripper_servo">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0. 0.0 0" rpy="${-0. * pi} ${0. * pi} ${0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="grey" />
+        </visual>
+        <collision>
+            <origin xyz="0. 0.0 0" rpy="${-0. * pi} ${0. * pi} ${0.5 * pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/dynamixel/XL-330.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="gripper" type="revolute">
+        <parent link="gripper_servo" />
+        <child link="gripper_moving_part" />
+        <origin  rpy="0 0 0" xyz="0 0 -0.007" />
+        <axis rpy="0 0 0" xyz="0 0 1" />
+        <limit effort="${effort}" lower="${-2.5 * pi/180.0}" upper="${85.0 * pi/180.0}" velocity="${velocity}"/>
+    </joint>
+
+    <link name="gripper_moving_part">
+        <xacro:default_inertial mass="0.1"/>
+        <visual>
+            <origin xyz="0.0085 -0.00025 0.01675" rpy="${0.*pi} ${1.*pi} ${0.*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/gripper_moving_part.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0.0085 -0.00025 0.01675" rpy="${0.*pi} ${1.*pi} ${0.*pi}"/>
+            <geometry>
+                <mesh filename="package://msrobot_description/meshes/follower/stl/gripper_moving_part.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </collision>
+    </link>
+</robot>
