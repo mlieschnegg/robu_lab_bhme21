@@ -1,4 +1,4 @@
-# ROS2 Laborübungen – 5AHMBA
+# ROS2 Laborübungen – 5BHME
 
 Dieses Repository enthält den ROS2-Workspace für die Laborübungen im Schuljahr 2025.  
 Die Schüler dokumentieren ihre Arbeitsschritte in Markdown-Dateien und committen Code + Dokumentation in Git.
