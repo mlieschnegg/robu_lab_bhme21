@@ -70,12 +70,14 @@
 - Speichert Bilder im Ordner `images/einheit01/`.  
 - Nutzt die Vorlage aus [ANLEITUNG.md](../ANLEITUNG.md).  
 
-### Blender (16.9.2025)
+### 1. Bearbeitung des Cage mittels Blender (16.9.2025)
 - STL in Blender eingefügt und versucht Material auf transparant zu ändern und in Gazebo zu importieren
 - STL war in Blender transparent allerding nicht in Gazebo 
 - Auf 0.001 sklaiert für richtige Größe
 
-### 1.Installation mit Quick Start Guide (Jazzy)
+### 2. Aufsetzen des Betriebssystems für den CandyBot (16.9.2025)
+
+Es wurde nach dem Quick Start Guide (Jazzy) des Turtlebot3 vorgegangen: 
 https://emanual.robotis.com/docs/en/platform/turtlebot3/sbc_setup/#sbc-setup
 
 Installation von 3.2.SBC Setup
@@ -88,3 +90,4 @@ beginnend bei Schritt 3.3.2.Raspberry Pi Camera
 - die Befehle wurden bis zum Schritt 3 befolgt
 - bei Schritt 4 - launchen der Kamera Node - tritt ein Fehler auf. Es ist keine Kamera verfügbar.
 - in der /boot/firmware/config.txt wurde der device tree overlay für die Raspberry Kamera V2 aktiviert (dtoverlay=imx219) führte zu keiner Verbesserung und die Kamera wurde weiterhin nicht erkannt
+- LI: Lösung des Kameraproblems: Es fehlten die Zugriffsrechte des Benutzers robu auf die Kamera. Der Benutzer robu muss zur Gruppe video und render hinzugefügt werden (sudo usermod -aG video,render $USER). Die Kamera läuft nun.
