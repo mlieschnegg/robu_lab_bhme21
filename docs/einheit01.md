@@ -69,3 +69,8 @@
 - Fügt Screenshots von RViz/Gazebo, URDF und ggf. Fotos der Hardware ein.  
 - Speichert Bilder im Ordner `images/einheit01/`.  
 - Nutzt die Vorlage aus [ANLEITUNG.md](../ANLEITUNG.md).  
+
+### Blender (16.9.2025)
+- STL in Blender eingefügt und versucht Material auf transparant zu ändern und in Gazebo zu importieren
+- STL war in Blender transparent allerding nicht in Gazebo 
+- Auf 0.001 sklaiert für richtige Größe
