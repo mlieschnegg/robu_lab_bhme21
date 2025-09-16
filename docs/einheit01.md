@@ -74,3 +74,17 @@
 - STL in Blender eingefügt und versucht Material auf transparant zu ändern und in Gazebo zu importieren
 - STL war in Blender transparent allerding nicht in Gazebo 
 - Auf 0.001 sklaiert für richtige Größe
+
+### 1.Installation mit Quick Start Guide (Jazzy)
+https://emanual.robotis.com/docs/en/platform/turtlebot3/sbc_setup/#sbc-setup
+
+Installation von 3.2.SBC Setup
+- PC mit den gleichen Hotspot wie der Raspberry verbinden
+- PC verbinden mit: ssh robu@172.20.10.14 (IP-Adresse des Rpi)
+- die IP-Adresse wurde vom Display des Raspberrys (waveshare 4.3 zoll Display) abgelesen -> hostname -I
+- alternativ könnte man auch die IP-Adresse am Handy ablesen
+
+beginnend bei Schritt 3.3.2.Raspberry Pi Camera
+- die Befehle wurden bis zum Schritt 3 befolgt
+- bei Schritt 4 - launchen der Kamera Node - tritt ein Fehler auf. Es ist keine Kamera verfügbar.
+- in der /boot/firmware/config.txt wurde der device tree overlay für die Raspberry Kamera V2 aktiviert (dtoverlay=imx219) führte zu keiner Verbesserung und die Kamera wurde weiterhin nicht erkannt
