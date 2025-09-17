@@ -95,5 +95,13 @@ beginnend bei Schritt 3.3.2.Raspberry Pi Camera
 - in der /boot/firmware/config.txt wurde der device tree overlay für die Raspberry Kamera V2 aktiviert (dtoverlay=imx219) führte zu keiner Verbesserung und die Kamera wurde weiterhin nicht erkannt
 - LI: Lösung des Kameraproblems: Es fehlten die Zugriffsrechte des Benutzers robu auf die Kamera. Der Benutzer robu muss zur Gruppe video und render hinzugefügt werden (sudo usermod -aG video,render $USER). Die Kamera läuft nun.
 
-### 3. Es fehlt Bayer und Scheucher (haben den Adapter umgebaut)...
+### 3. Bayer und Scheucher
+
+Dynamixel Adapter wurde so umgebaut, dass bei einem Stecker die VIN Anliegt und bei dem Anderen 5V.
+Dazu wurde eine Leiterbahn Durchgeritzt und ein Step down Converter auf die Unterseite geklebt. 
+Masse wurde mit der Ground plane verbunden, VIN mit dem Center Pin vom Hohlstecker, VOUT mit dem V Pin vom durchgeritzen Dynamixel Stecker.
+Danach ist es wichtig, Mit dem Multimeter auf Kurzschlüsse zu prüfen.
+Auf dem Surface Book von Herrn DIPL-ING Michael Lieschnegg BSC wurden versucht der custom Surface Kernel installiert, 
+um Features wie Touchscreen und das Abdocken zu ermöglichen. Allerdings ist das noch ein work in progress, da mit Ubuntu24 Probleme auftreten.
+
 ### 4. Divjak hat am Balancer gearbeitet....
